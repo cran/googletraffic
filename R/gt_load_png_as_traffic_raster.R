@@ -2,15 +2,19 @@
 
 #' Converts PNG to raster
 #'
-#' Converts PNG of Google traffic data to raster and translates color values to traffic values
+#' Converts PNG of [Google traffic data](https://developers.google.com/maps/documentation/javascript/trafficlayer) to raster and translates color values to traffic values
 #'
 #' @param filename Filename of PNG file
 #' @param location Vector of latitude and longitude used to create PNG file using [gt_make_png()]
 #' @param height Height (in pixels; pixel length depends on zoom) used to create PNG file using [gt_make_png()]
 #' @param width Width (in pixels; pixel length depends on zoom) used to create PNG file using [gt_make_png()]
-#' @param zoom Zoom used to PNG png file using [gt_make_png()]
-#'
+#' @param zoom Zoom level used to create PNG file using [gt_make_png()]
+#' @param traffic_color_dist_thresh Google traffic relies on four main base colors: `#63D668` for no traffic, `#FF974D` for medium traffic, `#F23C32` for high traffic, and `#811F1F` for heavy traffic. Slight variations of these colors can also represent traffic. By default, the base colors and all colors within a 4.6 color distance of each base color are used to define traffic; by default, the `CIEDE2000` metric is used to determine color distance. A value of 2.3 is one threshold used to define a "just noticeable distance" (JND) between colors (by default, 2 X JND is used). This parameter changes the color distance from the base colors used to define colors as traffic. For more information, see [here](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000).
+#' @param traffic_color_dist_metric See above; this parameter changes the metric used to calculate distances between colors. By default, `CIEDE2000` is used; `CIE76` and `CIE94` can also be used. For more information, see [here](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000).
 #' @return Returns a raster where each pixel represents traffic level (1 = no traffic, 2 = medium traffic, 3 = traffic delays, 4 = heavy traffic)
+#'
+#' @references Markus Hilpert, Jenni A. Shearston, Jemaleddin Cole, Steven N. Chillrud, and Micaela E. Martinez. [Acquisition and analysis of crowd-sourced traffic data](https://arxiv.org/abs/2105.12235). CoRR, abs/2105.12235, 2021.
+#' @references Pavel Pokorny. [Determining traffic levels in cities using google maps](https://ieeexplore.ieee.org/abstract/document/8326831). In 2017 Fourth International Conference on Mathematics and Computers in Sciences and in Industry (MCSI), pages 144–147, 2017.
 #'
 #' @examples 
 #' \dontrun{
@@ -35,7 +39,9 @@ gt_load_png_as_traffic_raster <- function(filename,
                                           location,
                                           height,
                                           width,
-                                          zoom){
+                                          zoom,
+                                          traffic_color_dist_thresh = 4.6,
+                                          traffic_color_dist_metric = "CIEDE2000"){
   
   # Code produces some warnings that are not relevant; for example, when initially
   # make a raster, we get a warning that the extent is not defined. This warning
@@ -54,45 +60,63 @@ gt_load_png_as_traffic_raster <- function(filename,
     ## Image to hex
     rimg <- raster::as.raster(img) 
     
-    colors_df <- rimg %>% 
-      table() %>% 
-      as.data.frame() %>%
-      dplyr::rename(hex = ".")
-    
-    colors_df$hex <- colors_df$hex %>% 
-      as.character()
-    
-    ## Assign traffic colors based on hsl
-    hsl_df <- colors_df$hex %>% 
-      plotwidgets::col2hsl() %>%
-      t() %>%
-      as.data.frame() 
-    
-    colors_df <- dplyr::bind_cols(colors_df, hsl_df)
-    
-    colors_df <- colors_df %>%
-      dplyr::mutate(color = case_when(#((H == 0) & (S < 0.2)) ~ "background",
-        ((H == 0) & (S >= 0.28) & (S < 0.7) & (L >= 0.3) & (L <= 0.42)) ~ "dark-red",
-        H > 0 & H <= 5 & L <= 0.65 ~ "red", # L <= 0.80
-        H >= 20 & H <= 28 & L <= 0.80 ~ "orange", # L <= 0.85
-        H >= 120 & H <= 135 & L <= 0.80 ~ "green"))
-    
-    ## Apply traffic colors to raster
-    colors_unique <- colors_df$color %>% unique()
-    colors_unique <- colors_unique[!is.na(colors_unique)]
-    colors_unique <- colors_unique[!(colors_unique %in% "background")]
-    rimg <- matrix(rimg) #%>% raster::t() #%>% base::t()
-    for(color_i in colors_unique){
-      rimg[rimg %in% colors_df$hex[colors_df$color %in% color_i]] <- color_i
+    if(traffic_color_dist_thresh == 0){
+      
+      r[] <- NA
+      r[rimg %in% "#63D668FF"] <- 1
+      r[rimg %in% "#FF974DFF"] <- 2
+      r[rimg %in% "#F23C32FF"] <- 3
+      r[rimg %in% "#811F1FFF"] <- 4
+      
+    } else {
+      
+      ## Color Values
+      color_df <- rimg[] %>% 
+        unique() %>% 
+        as.data.frame() %>%
+        dplyr::rename(hex = ".") %>%
+        dplyr::mutate(hex_noff = str_replace_all(.data$hex, "FF$", ""))
+      
+      lab_df <- color_df$hex_noff %>% 
+        schemr::hex_to_lab()
+      
+      color_df <- bind_cols(color_df,
+                            lab_df)
+      
+      ## Distance
+      color_df$dist_1 <- ColorNameR::colordiff(color_df[,c("l", "a", "b")],
+                                               as.matrix(schemr::hex_to_lab("#63D668")),
+                                               metric = traffic_color_dist_metric)
+      
+      color_df$dist_2 <- ColorNameR::colordiff(color_df[,c("l", "a", "b")],
+                                               as.matrix(schemr::hex_to_lab("#FF974D")),
+                                               metric = traffic_color_dist_metric)
+      
+      color_df$dist_3 <- ColorNameR::colordiff(color_df[,c("l", "a", "b")],
+                                               as.matrix(schemr::hex_to_lab("#F23C32")),
+                                               metric = traffic_color_dist_metric)
+      
+      color_df$dist_4 <- ColorNameR::colordiff(color_df[,c("l", "a", "b")],
+                                               as.matrix(schemr::hex_to_lab("#811F1F")),
+                                               metric = traffic_color_dist_metric)
+      
+      ## Assign traffic levels
+      color_df <- color_df %>%
+        dplyr::mutate(traffic = case_when(
+          dist_1 <= traffic_color_dist_thresh ~ 1,
+          dist_2 <= traffic_color_dist_thresh ~ 2,
+          dist_3 <= traffic_color_dist_thresh ~ 3,
+          dist_4 <= traffic_color_dist_thresh ~ 4
+        )) 
+      
+      r[] <- NA
+      r[rimg %in% color_df$hex[color_df$traffic %in% 1]] <- 1
+      r[rimg %in% color_df$hex[color_df$traffic %in% 2]] <- 2
+      r[rimg %in% color_df$hex[color_df$traffic %in% 3]] <- 3
+      r[rimg %in% color_df$hex[color_df$traffic %in% 4]] <- 4
     }
     
-    r[] <- NA
-    r[rimg %in% "green"]    <- 1
-    r[rimg %in% "orange"]   <- 2
-    r[rimg %in% "red"]      <- 3
-    r[rimg %in% "dark-red"] <- 4
-    
-    ## Spatially define raster
+    #### Spatially define raster
     ext_4326 <- gt_make_extent(latitude = latitude,
                                longitude = longitude,
                                height = height,

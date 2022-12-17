@@ -11,6 +11,7 @@ gt_make_png(
   zoom,
   out_filename,
   google_key,
+  webshot_zoom = 1,
   webshot_delay = NULL,
   print_progress = TRUE
 )
@@ -22,21 +23,23 @@ gt_make_png(
 
 \item{width}{Width (in pixels; pixel length depends on zoom)}
 
-\item{zoom}{Zoom level; integer from 0 to 20. For more information about how zoom levels correspond to pixel size, see \href{https://wiki.openstreetmap.org/wiki/Zoom_levels}{here}}
+\item{zoom}{Zoom level; integer from 5 to 20. For more information about how zoom levels correspond to pixel size, see \href{https://wiki.openstreetmap.org/wiki/Zoom_levels}{here} and \href{https://developers.google.com/maps/documentation/javascript/overview#zoom-levels}{here}.}
 
 \item{out_filename}{Filename of PNG file to make}
 
-\item{google_key}{Google API key}
+\item{google_key}{Google API key, where the \href{https://developers.google.com/maps/documentation/javascript/overview}{Maps JavaScript API} is enabled. To create a Google API key, follow \href{https://developers.google.com/maps/get-started#create-project}{these instructions}.}
+
+\item{webshot_zoom}{How many pixels should be created relative to height and width values. If \code{height} and \code{width} are set to \code{100} and \code{webshot_zoom} is set to \code{2}, the resulting raster will have dimensions of about \verb{200x200} (default: \code{1}).}
 
 \item{webshot_delay}{How long to wait for Google traffic layer to render. Larger height/widths require longer delay times. If \code{NULL}, the following delay time (in seconds) is used: \code{delay = max(height,width)/200}.}
 
 \item{print_progress}{Whether to print function progress (default: \code{TRUE})}
 }
 \value{
-Returns a georeferenced raster file. The file can contain the following values: 1 = no traffic; 2 = light traffic; 3 = moderate traffic; 4 = heavy traffic.
+Returns a PNG file showing traffic levels.
 }
 \description{
-Make a png file of Google traffic data. The \code{\link[=gt_load_png_as_traffic_raster]{gt_load_png_as_traffic_raster()}} function can then
+Make a png file of \href{https://developers.google.com/maps/documentation/javascript/trafficlayer}{Google traffic data}. The \code{\link[=gt_load_png_as_traffic_raster]{gt_load_png_as_traffic_raster()}} function can then
 be used to convert the png into a traffic raster
 }
 \examples{
@@ -49,4 +52,9 @@ gt_make_png(location     = c(40.712778, -74.006111),
             google_key   = "GOOGLE-KEY-HERE")
 }
 
+}
+\references{
+Markus Hilpert, Jenni A. Shearston, Jemaleddin Cole, Steven N. Chillrud, and Micaela E. Martinez. \href{https://arxiv.org/abs/2105.12235}{Acquisition and analysis of crowd-sourced traffic data}. CoRR, abs/2105.12235, 2021.
+
+Pavel Pokorny. \href{https://ieeexplore.ieee.org/abstract/document/8326831}{Determining traffic levels in cities using google maps}. In 2017 Fourth International Conference on Mathematics and Computers in Sciences and in Industry (MCSI), pages 144–147, 2017.
 }

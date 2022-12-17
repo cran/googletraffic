@@ -1,18 +1,22 @@
 #' Make Google Traffic PNG
 #' 
-#' Make a png file of Google traffic data. The [gt_load_png_as_traffic_raster()] function can then
+#' Make a png file of [Google traffic data](https://developers.google.com/maps/documentation/javascript/trafficlayer). The [gt_load_png_as_traffic_raster()] function can then
 #' be used to convert the png into a traffic raster
 #' 
 #' @param location Vector of latitude and longitude
 #' @param height Height (in pixels; pixel length depends on zoom)
 #' @param width Width (in pixels; pixel length depends on zoom)
-#' @param zoom Zoom level; integer from 0 to 20. For more information about how zoom levels correspond to pixel size, see [here](https://wiki.openstreetmap.org/wiki/Zoom_levels)
+#' @param zoom Zoom level; integer from 5 to 20. For more information about how zoom levels correspond to pixel size, see [here](https://wiki.openstreetmap.org/wiki/Zoom_levels) and [here](https://developers.google.com/maps/documentation/javascript/overview#zoom-levels).
 #' @param out_filename Filename of PNG file to make
-#' @param google_key Google API key
+#' @param google_key Google API key, where the [Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/overview) is enabled. To create a Google API key, follow [these instructions](https://developers.google.com/maps/get-started#create-project).
+#' @param webshot_zoom How many pixels should be created relative to height and width values. If `height` and `width` are set to `100` and `webshot_zoom` is set to `2`, the resulting raster will have dimensions of about `200x200` (default: `1`). 
 #' @param webshot_delay How long to wait for Google traffic layer to render. Larger height/widths require longer delay times. If `NULL`, the following delay time (in seconds) is used: `delay = max(height,width)/200`. 
 #' @param print_progress Whether to print function progress (default: `TRUE`)
 #'
-#' @return Returns a georeferenced raster file. The file can contain the following values: 1 = no traffic; 2 = light traffic; 3 = moderate traffic; 4 = heavy traffic.
+#' @return Returns a PNG file showing traffic levels.
+#' 
+#' @references Markus Hilpert, Jenni A. Shearston, Jemaleddin Cole, Steven N. Chillrud, and Micaela E. Martinez. [Acquisition and analysis of crowd-sourced traffic data](https://arxiv.org/abs/2105.12235). CoRR, abs/2105.12235, 2021.
+#' @references Pavel Pokorny. [Determining traffic levels in cities using google maps](https://ieeexplore.ieee.org/abstract/document/8326831). In 2017 Fourth International Conference on Mathematics and Computers in Sciences and in Industry (MCSI), pages 144–147, 2017.
 #'
 #' @examples
 #' \dontrun{
@@ -31,6 +35,7 @@ gt_make_png <- function(location,
                         zoom,
                         out_filename,
                         google_key,
+                        webshot_zoom = 1,
                         webshot_delay = NULL,
                         print_progress = TRUE){
   
@@ -68,7 +73,7 @@ gt_make_png <- function(location,
                    vwidth = width,
                    cliprect = "viewport",
                    delay = webshot_delay,
-                   zoom = 1)
+                   zoom = webshot_zoom)
   
   ## Read/Write png to file
   img <- png::readPNG(file.path(filename_dir, paste0(filename_only,".png")))

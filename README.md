@@ -1,4 +1,12 @@
 # googletraffic  <img src="man/figures/hex.png" align="right" width="200" />
+
+<!-- badges: start -->
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/googletraffic)](https://cran.r-project.org/package=googletraffic)
+[![R-CMD-check](https://github.com/dime-worldbank/googletraffic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dime-worldbank/googletraffic/actions/workflows/R-CMD-check.yaml)
+![downloads](http://cranlogs.r-pkg.org/badges/grand-total/googletraffic)
+<!-- badges: end -->
+  
 Create Georeferenced Traffic Data from the [Google Maps Javascript API](https://developers.google.com/maps/documentation/javascript/trafficlayer)
 
 * [Overview](#overview)
@@ -9,7 +17,9 @@ Create Georeferenced Traffic Data from the [Google Maps Javascript API](https://
 
 ## Overview <a name="overview"></a>
 
-Google Maps [displays information about traffic conditions](https://www.google.com/maps/@38.909083,-77.0249335,12.07z/data=!5m1!1e1) across an area. This package provides functions to produce georeferenced rasters from live Google Maps traffic information. Having Google traffic information in a georeferenced data format facilitates analysis of traffic information (e.g., spatially merging traffic information with other data sources).
+Google Maps [displays information about traffic conditions](https://www.google.com/maps/@38.909083,-77.0249335,12.07z/data=!5m1!1e1) across an area. This package provides functions to produce georeferenced rasters from real-time Google Maps traffic information. Having Google traffic information in a georeferenced data format facilitates analysis of traffic information (e.g., spatially merging traffic information with other data sources). 
+
+This package was inspired by (1) existing research that has used Google traffic information, including in [New York City](https://www.sciencedirect.com/science/article/pii/S0048969721034070) and [Dar es Salaam](https://openknowledge.worldbank.org/handle/10986/33445), and (2) similar algorithms implemented in [JavaScript](https://ieeexplore.ieee.org/abstract/document/8326831) and in a [C shell script](https://arxiv.org/abs/2105.12235).
 
 <!--- The below image shows an example raster produced using the package showing [traffic within Washington, DC.](https://www.google.com/maps/@38.9098813,-77.0406205,15.01z/data=!5m1!1e1)
 
@@ -29,11 +39,10 @@ Pixel values in rasters are derived from Google traffic colors and can be one of
 
 ## Installation <a name="installation"></a>
 
-The package is available via github and can be installed using `devtools`.
+The package can be installed via CRAN.
 
 ```r  
-# install.packages("devtools")
-devtools::install_github("dime-worldbank/googletraffic")
+install.packages("googletraffic")
 ```
 
 ## API Key <a name="apikey"></a>

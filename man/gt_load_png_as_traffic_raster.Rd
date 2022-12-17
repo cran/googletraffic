@@ -4,7 +4,15 @@
 \alias{gt_load_png_as_traffic_raster}
 \title{Converts PNG to raster}
 \usage{
-gt_load_png_as_traffic_raster(filename, location, height, width, zoom)
+gt_load_png_as_traffic_raster(
+  filename,
+  location,
+  height,
+  width,
+  zoom,
+  traffic_color_dist_thresh = 4.6,
+  traffic_color_dist_metric = "CIEDE2000"
+)
 }
 \arguments{
 \item{filename}{Filename of PNG file}
@@ -15,13 +23,17 @@ gt_load_png_as_traffic_raster(filename, location, height, width, zoom)
 
 \item{width}{Width (in pixels; pixel length depends on zoom) used to create PNG file using \code{\link[=gt_make_png]{gt_make_png()}}}
 
-\item{zoom}{Zoom used to PNG png file using \code{\link[=gt_make_png]{gt_make_png()}}}
+\item{zoom}{Zoom level used to create PNG file using \code{\link[=gt_make_png]{gt_make_png()}}}
+
+\item{traffic_color_dist_thresh}{Google traffic relies on four main base colors: \verb{#63D668} for no traffic, \verb{#FF974D} for medium traffic, \verb{#F23C32} for high traffic, and \verb{#811F1F} for heavy traffic. Slight variations of these colors can also represent traffic. By default, the base colors and all colors within a 4.6 color distance of each base color are used to define traffic; by default, the \code{CIEDE2000} metric is used to determine color distance. A value of 2.3 is one threshold used to define a "just noticeable distance" (JND) between colors (by default, 2 X JND is used). This parameter changes the color distance from the base colors used to define colors as traffic. For more information, see \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{here}.}
+
+\item{traffic_color_dist_metric}{See above; this parameter changes the metric used to calculate distances between colors. By default, \code{CIEDE2000} is used; \code{CIE76} and \code{CIE94} can also be used. For more information, see \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{here}.}
 }
 \value{
 Returns a raster where each pixel represents traffic level (1 = no traffic, 2 = medium traffic, 3 = traffic delays, 4 = heavy traffic)
 }
 \description{
-Converts PNG of Google traffic data to raster and translates color values to traffic values
+Converts PNG of \href{https://developers.google.com/maps/documentation/javascript/trafficlayer}{Google traffic data} to raster and translates color values to traffic values
 }
 \examples{
 \dontrun{
@@ -41,4 +53,9 @@ r <- gt_load_png_as_traffic_raster(filename = "google_traffic.png",
                                    zoom     = 16)
 }                                    
 
+}
+\references{
+Markus Hilpert, Jenni A. Shearston, Jemaleddin Cole, Steven N. Chillrud, and Micaela E. Martinez. \href{https://arxiv.org/abs/2105.12235}{Acquisition and analysis of crowd-sourced traffic data}. CoRR, abs/2105.12235, 2021.
+
+Pavel Pokorny. \href{https://ieeexplore.ieee.org/abstract/document/8326831}{Determining traffic levels in cities using google maps}. In 2017 Fourth International Conference on Mathematics and Computers in Sciences and in Industry (MCSI), pages 144–147, 2017.
 }

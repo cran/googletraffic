@@ -1,6 +1,6 @@
 Package: googletraffic
 Title: Google Traffic
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Robert", "Marty", , "rmarty@worldbank.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3164-3813"))
@@ -11,10 +11,10 @@ RoxygenNote: 7.2.1
 URL: https://dime-worldbank.github.io/googletraffic/
 BugReports: https://github.com/dime-worldbank/googletraffic/issues
 Imports: dplyr, googleway, htmlwidgets, plotwidgets, png, sf, sp,
-        stringr, webshot, raster, ColorNameR, schemr
+        stringr, webshot2, raster, ColorNameR, schemr
 NeedsCompilation: no
-Packaged: 2022-12-17 16:22:24 UTC; robmarty
+Packaged: 2023-03-04 02:26:34 UTC; robmarty
 Author: Robert Marty [aut, cre] (<https://orcid.org/0000-0002-3164-3813>)
 Maintainer: Robert Marty <rmarty@worldbank.org>
 Repository: CRAN
-Date/Publication: 2022-12-17 16:50:02 UTC
+Date/Publication: 2023-03-04 07:00:02 UTC

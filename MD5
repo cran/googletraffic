@@ -1,10 +1,10 @@
-7378b371df33989a23b3f48d65b5e4a5 *DESCRIPTION
+641e6624cad1858725f50bf0e3abadc5 *DESCRIPTION
 93e38382609732cbe38b7590d04f1baf *LICENSE
 a0c25d86e02c576bea8fa7c75a5668b1 *NAMESPACE
 264840fdbb80184706a9372264d7ef2b *NEWS.md
 52aec0433ae19b7429ffce8b1a1540ab *R/gt_estimate_webshot_delay.R
 33af207381c6f6939bce5e50f45ebb56 *R/gt_html_to_raster.R
-ff107efc9d5e653217f0e4efe1265592 *R/gt_load_png_as_traffic_raster.R
+8bf752e82649f654c27f2f4417363d70 *R/gt_load_png_as_traffic_raster.R
 92bbe6cd57ceec6ec4e8967b6fb72506 *R/gt_make_extent.R
 3b95438a81785b0f2a97a94bf2305e13 *R/gt_make_grid.R
 aae89c6c2c83de11168722363ce85144 *R/gt_make_html.R

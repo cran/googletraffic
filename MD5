@@ -1,10 +1,10 @@
-641e6624cad1858725f50bf0e3abadc5 *DESCRIPTION
+b1a81284ff951d159e5198f579f12cd0 *DESCRIPTION
 93e38382609732cbe38b7590d04f1baf *LICENSE
 a0c25d86e02c576bea8fa7c75a5668b1 *NAMESPACE
 264840fdbb80184706a9372264d7ef2b *NEWS.md
 52aec0433ae19b7429ffce8b1a1540ab *R/gt_estimate_webshot_delay.R
 33af207381c6f6939bce5e50f45ebb56 *R/gt_html_to_raster.R
-8bf752e82649f654c27f2f4417363d70 *R/gt_load_png_as_traffic_raster.R
+f3ca1a78d64b4a1f98079b2a63f2ceb2 *R/gt_load_png_as_traffic_raster.R
 92bbe6cd57ceec6ec4e8967b6fb72506 *R/gt_make_extent.R
 3b95438a81785b0f2a97a94bf2305e13 *R/gt_make_grid.R
 aae89c6c2c83de11168722363ce85144 *R/gt_make_html.R
@@ -13,7 +13,7 @@ aabea22e449e1d7c6f481f4d306b71e0 *R/gt_make_raster.R
 47262b439be4101d06214ca85e2f791b *R/gt_make_raster_from_grid.R
 7166dc7b407726b2d3d4fdfb30860a00 *R/gt_make_raster_from_polygon.R
 785de68094e542ee5e67caf3eef8fa82 *R/gt_mosaic.R
-7ddbce3a08352a96e47ee541b47b4925 *README.md
+cbf8f9614b66cb485461b47defba1d56 *README.md
 9d8dbebbff14ed7cab49ec9c951f539e *man/gt_load_png_as_traffic_raster.Rd
 f1ab06099837d416c6bff23d9420382f *man/gt_make_grid.Rd
 2847c3a6193ef3975e443febba5ec5bf *man/gt_make_png.Rd

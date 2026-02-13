@@ -55,7 +55,7 @@ devtools::install_github("dime-worldbank/googletraffic")
 
 ## API Key <a name="apikey"></a>
 
-Querying Google traffic information requires a Google API key with the [Maps Javascript API](https://developers.google.com/maps/documentation/javascript/overview) enabled. To create a Google API key, [follow these instructions](https://developers.google.com/maps/get-started#create-project).
+Querying Google traffic information requires a Google API key with the [Maps Javascript API](https://developers.google.com/maps/documentation/javascript/overview) enabled. To create a Google API key, [follow these instructions](https://developers.google.com/maps/get-started#create-project). For information on Google Maps API pricing, see [here](https://mapsplatform.google.com/pricing/); 1,000 queries to the Maps JavaScript API (for Dynamic Maps) costs \$7. Google Maps provides a \$200 monthly credit; consequently, 28,571 queries can be made within the \$200 credit amount each month.
 
 ## Quickstart <a name="quickstart"></a>
 

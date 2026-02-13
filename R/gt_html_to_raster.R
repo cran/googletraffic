@@ -42,7 +42,7 @@ gt_html_to_raster <- function(filename,
   filename_dir  <- filename_root %>% 
     stringr::str_replace_all(filename_only, "") %>%
     stringr::str_sub(end = -2)
-
+  
   if(print_progress){
     cat(paste0("Pausing for ", webshot_delay, " seconds to allow traffic data to render"))
   }

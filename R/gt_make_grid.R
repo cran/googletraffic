@@ -52,10 +52,13 @@ gt_make_grid <- function(polygon,
   
   ## If polygon is more than one row, make one polygon
   if(nrow(polygon) > 1){
-    polygon$id <- 1
     polygon <- polygon %>%
-      dplyr::group_by(id) %>%
-      dplyr::summarize(geometry = st_union(geometry))
+      dplyr::summarize(geometry = sf::st_union(geometry))
+    
+    # polygon$id <- 1
+    # polygon <- polygon %>%
+    #   dplyr::group_by(.data$id) %>%
+    #   dplyr::summarize(geometry = st_union(geometry))
   }
   
   #### Checks
